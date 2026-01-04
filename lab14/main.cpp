@@ -2,18 +2,6 @@
 #include "main.h"
 #include "../../utils/utils/utils.h"
 
-
-struct Animal {
-	char name[20];
-	int age;
-	double weight;
-	char group;
-	bool sterilized;
-	int reviews[3];
-};
-
-void print(Animal&);
-
 int main() {
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
@@ -43,19 +31,7 @@ int main() {
 			print(a1);
 
 			Animal a2;
-			cout << "Введите имя: ";
-			cin >> a2.name;
-			cout << "Введите возраст: ";
-			cin >> a2.age;
-			cout << "Введите вес: ";
-			cin >> a2.weight;
-			cout << "Введите группу: ";
-			cin >> a2.group;
-			cout << "Животное стерилизовали (0-нет/1-да): ";
-			cin >> a2.sterilized;
-			cout << "Введите оценки (3): ";
-			cin >> a2.reviews[0] >> a2.reviews[1] >> a2.reviews[2];
-
+			a2 = input();
 			print(a2);
 
 			Animal* pa3 = new Animal;
@@ -76,13 +52,96 @@ int main() {
 			strcpy_s(ra4.name, "Lion");
 			ra4.age = 3;
 			ra4.weight = 43.9;
-			ra4.group = 'C';
-			ra4.sterilized = false;
+			ra4.group = 'C';	
+			ra4.sterilized = true;
 			ra4.reviews[0] = 9;
 			ra4.reviews[1] = 8;
 			ra4.reviews[2] = 9;
 
 			print(ra4);
+		} break;
+
+		case 2: {
+			const int size = 3;
+			Animal animals[size];
+
+			for (int i = 0; i < size; i++) {
+				animals[i] = input();
+				print(animals[i]);
+			}
+
+			cout << "\nЗаписанные животные:\n";
+			for (int i = 0; i < size; i++) {
+				print(animals[i]);
+			}
+
+
+			double x;
+			cout << "Введите искомый вес: ";
+			cin >> x;
+
+			int count = 0;
+			for (int i = 0; i < size; i++) {
+				count += animals[i].weight > x ? 1 : 0;
+			}
+			cout << "Подходящие животные: " << count << endl;
+
+
+			cout << "\nДинамический массив.\n";
+			int size0 = 2;
+			Animal* animals0 = createArray<Animal>(size0);
+
+			for (int i = 0; i < size0; i++) {
+				animals0[i] = input();
+				print(animals0[i]);
+			}
+
+			cout << "\nЗаписанные животные:\n";
+			for (int i = 0; i < size0; i++) {
+				print(animals0[i]);
+			}
+
+			delete[] animals0;
+			animals0 = NULL;
+		} break;
+
+		case 3: {
+			const int size = 5;
+			Tovar tovars[size];
+
+			for (int i = 0; i < size; i++) {
+				cin.ignore();
+
+				cout << "Название товара: "; 
+				cin.getline(tovars[i].name, 20);
+				cout << "Название магазина: "; 
+				cin.getline(tovars[i].shopName, 20);
+				cout << "Стоимость товара: "; 
+				cin >> tovars[i].price;
+			}
+
+			sortTovar(tovars, size);
+
+			cout << endl;
+			for (int i = 0; i < size; i++) {
+				cout << tovars[i].name << " | " << tovars[i].shopName << " | " << tovars[i].price << endl;
+			}
+
+			char search[20];
+			cout << "\nВведите название товара: ";
+			cin.ignore();
+			cin.getline(search, 20);
+
+			int iTovar = searchTovar(tovars, size, search);
+
+			if (iTovar >= 0) {
+				cout << "Название: " << tovars[iTovar].name << endl;
+				cout << "Магазин: " << tovars[iTovar].shopName << endl;
+				cout << "Стоимость: " << tovars[iTovar].price << " руб.\n";
+			}
+			else {
+				cout << "Такого товара нет.\n";
+			}
 		} break;
 
 
@@ -95,10 +154,4 @@ int main() {
 
 	system("pause");
 	return 0;
-}
-
-void print(Animal& a) {
-	cout << a.name << " | " << a.age << " | " << a.weight << " | " << a.group << " | "
-		<< boolalpha << a.sterilized << " | " << a.reviews[0] << ", " << a.reviews[1] << ", " << a.reviews[2] << endl;
-	return;
 }
